@@ -12,6 +12,14 @@ function readTokenFromFile(filePath){
   }
 }
 
+function printable(str){
+  let ascii = /^[ -~]+$/;
+  if (ascii.test(str))
+    return true;
+  else
+    return false;
+}
+
 let token = readTokenFromFile('./token.txt');
 const bot = new Telegraf(token);
 
@@ -21,7 +29,11 @@ bot.command('start', ctx=>{
 });
 
 bot.on('message', ctx =>{
-  console.log(ctx.from.username +' - '+ ctx.message.text);
+  let consoleStr = ctx.from.username +' - '+ ctx.message.text;
+  if (printable(consoleStr))
+    console.log(consoleStr);
+  else
+    console.log('someone sent you something unholy...');
   ctx.reply(ctx.message.text);
 });
 
